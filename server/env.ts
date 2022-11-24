@@ -348,20 +348,24 @@ export class Environment {
    */
   @IsOptional()
   public LOCAL_LOGIN_ENABLED = this.toBoolean(
-    process.env.LOCAL_LOGIN_ENABLED ?? false
+    process.env.LOCAL_LOGIN_ENABLED ?? "false"
+  );
+
+  @IsOptional()
+  @CannotUseWithout("LOCAL_LOGIN_EMAIL")
+  public LOCAL_LOGIN_EMAIL = this.toOptionalString(
+    process.env.LOCAL_LOGIN_EMAIL
   );
 
   @IsOptional()
   @CannotUseWithout("LOCAL_LOGIN_PASSWORD")
-  public LOCAL_LOGIN_USERNAME = this.toOptionalString(
-    process.env.LOCAL_LOGIN_USERNAME
+  public LOCAL_LOGIN_PASSWORD = this.toOptionalString(
+    process.env.LOCAL_LOGIN_PASSWORD
   );
 
   @IsOptional()
   @CannotUseWithout("LOCAL_LOGIN_USERNAME")
-  public LOCAL_LOGIN_PASSWORD = this.toOptionalString(
-    process.env.LOCAL_LOGIN_PASSWORD
-  );
+  public LOCAL_LOGIN_NAME = this.toOptionalString(process.env.LOCAL_LOGIN_NAME);
 
   /**
    * Google OAuth2 client credentials. To enable authentication with Google.
