@@ -587,6 +587,7 @@
   "You signed in with {{ authProviderName }} last time.": "You signed in with {{ authProviderName }} last time.",
   "Or": "Or",
   "Already have an account? Go to <1>login</1>.": "Already have an account? Go to <1>login</1>.",
+  "Password": "Password",
   "Any collection": "Any collection",
   "Any time": "Any time",
   "Past day": "Past day",

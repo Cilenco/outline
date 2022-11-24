@@ -110,6 +110,24 @@ class User extends ParanoidModel {
   email: string | null;
 
   @NotContainsUrl
+  @Length({
+    min: 60,
+    max: 60,
+    msg: "User password hash must be exactly 60 characters",
+  })
+  @Column
+  passwordHash: string | null;
+
+  @NotContainsUrl
+  @Length({
+    min: 10,
+    max: 10,
+    msg: "User password salt must be exactly 10 characters",
+  })
+  @Column
+  passwordSalt: string | null;
+
+  @NotContainsUrl
   @Length({ max: 255, msg: "User username must be 255 characters or less" })
   @Column
   username: string | null;
