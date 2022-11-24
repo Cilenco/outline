@@ -352,11 +352,13 @@ export class Environment {
   );
 
   @IsOptional()
+  @CannotUseWithout("LOCAL_LOGIN_PASSWORD")
   public LOCAL_LOGIN_USERNAME = this.toOptionalString(
     process.env.LOCAL_LOGIN_USERNAME
   );
 
   @IsOptional()
+  @CannotUseWithout("LOCAL_LOGIN_USERNAME")
   public LOCAL_LOGIN_PASSWORD = this.toOptionalString(
     process.env.LOCAL_LOGIN_PASSWORD
   );
