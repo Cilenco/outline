@@ -344,6 +344,24 @@ export class Environment {
   public DD_API_KEY = process.env.DD_API_KEY;
 
   /**
+   * Local login credentials. To enable local login with database credentials.
+   */
+  @IsOptional()
+  public LOCAL_LOGIN_ENABLED = this.toBoolean(
+    process.env.LOCAL_LOGIN_ENABLED ?? false
+  );
+
+  @IsOptional()
+  public LOCAL_LOGIN_USERNAME = this.toOptionalString(
+    process.env.LOCAL_LOGIN_USERNAME
+  );
+
+  @IsOptional()
+  public LOCAL_LOGIN_PASSWORD = this.toOptionalString(
+    process.env.LOCAL_LOGIN_PASSWORD
+  );
+
+  /**
    * Google OAuth2 client credentials. To enable authentication with Google.
    */
   @IsOptional()
