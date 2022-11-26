@@ -38,6 +38,10 @@ const Profile = () => {
       showToast(err.message, {
         type: "error",
       });
+    } finally {
+      setOldPassword("");
+      setNewPassword1("");
+      setNewPassword2("");
     }
   };
 
