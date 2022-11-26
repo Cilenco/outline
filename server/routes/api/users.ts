@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import Router from "koa-router";
+import bcrypt from "bcryptjs";
 import { has } from "lodash";
 import { Op, WhereOptions } from "sequelize";
 import { UserPreference } from "@shared/types";
@@ -185,9 +186,13 @@ router.post(
   transaction(),
   async (ctx: TransactionContext) => {
     const { user, transaction } = ctx.state;
-    const { name, avatarUrl, language, preferences } = ctx.request.body;
+    const { name, password, avatarUrl, language, preferences } = ctx.request.body;
     if (name) {
       user.name = name;
+    }
+    console.log("Password", password);
+    if (password) {
+      user.passwordHash = bcrypt.hashSync(password);
     }
     if (avatarUrl) {
       user.avatarUrl = avatarUrl;

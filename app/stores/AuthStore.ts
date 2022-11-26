@@ -221,6 +221,7 @@ export default class AuthStore {
   @action
   updateUser = async (params: {
     name?: string;
+    password?: string | null;
     avatarUrl?: string | null;
     language?: string;
     preferences?: UserPreferences;
