@@ -190,7 +190,6 @@ router.post(
     if (name) {
       user.name = name;
     }
-    console.log("Password", password);
     if (password) {
       user.passwordHash = bcrypt.hashSync(password);
     }

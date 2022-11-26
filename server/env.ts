@@ -352,19 +352,22 @@ export class Environment {
   );
 
   @IsOptional()
-  @CannotUseWithout("LOCAL_LOGIN_EMAIL")
+  @CannotUseWithout("LOCAL_LOGIN_PASSWORD")
+  @CannotUseWithout("LOCAL_LOGIN_NAME")
   public LOCAL_LOGIN_EMAIL = this.toOptionalString(
     process.env.LOCAL_LOGIN_EMAIL
   );
 
   @IsOptional()
-  @CannotUseWithout("LOCAL_LOGIN_PASSWORD")
+  @CannotUseWithout("LOCAL_LOGIN_EMAIL")
+  @CannotUseWithout("LOCAL_LOGIN_NAME")
   public LOCAL_LOGIN_PASSWORD = this.toOptionalString(
     process.env.LOCAL_LOGIN_PASSWORD
   );
 
   @IsOptional()
-  @CannotUseWithout("LOCAL_LOGIN_USERNAME")
+  @CannotUseWithout("LOCAL_LOGIN_PASSWORD")
+  @CannotUseWithout("LOCAL_LOGIN_EMAIL")
   public LOCAL_LOGIN_NAME = this.toOptionalString(process.env.LOCAL_LOGIN_NAME);
 
   /**

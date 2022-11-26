@@ -25,6 +25,7 @@ import useStores from "~/hooks/useStores";
 import isCloudHosted from "~/utils/isCloudHosted";
 import { changeLanguage, detectLanguage } from "~/utils/language";
 import AuthenticationProvider from "./AuthenticationProvider";
+import LocalAuthProvider from "./LocalAuthProvider";
 import Notices from "./Notices";
 
 function Header({ config }: { config?: Config | undefined }) {
@@ -196,6 +197,7 @@ function Login({ children }: Props) {
           </>
         )}
         <Notices />
+        <LocalAuthProvider hasExternalAuth={hasMultipleProviders} />
         {defaultProvider && (
           <React.Fragment key={defaultProvider.id}>
             <AuthenticationProvider

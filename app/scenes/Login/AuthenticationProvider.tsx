@@ -54,6 +54,10 @@ function AuthenticationProvider(props: Props) {
     }
   };
 
+  if (id === "local") {
+    return null;
+  }
+
   if (id === "email") {
     if (isCreate) {
       return null;

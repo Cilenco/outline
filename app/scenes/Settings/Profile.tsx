@@ -18,6 +18,9 @@ const Profile = () => {
   const user = useCurrentUser();
   const form = React.useRef<HTMLFormElement>(null);
   const [name, setName] = React.useState<string>(user.name || "");
+  const [oldPassword, setOldPassword] = React.useState<string>("");
+  const [newPassword1, setNewPassword1] = React.useState<string>("");
+  const [newPassword2, setNewPassword2] = React.useState<string>("");
   const { showToast } = useToasts();
   const { t } = useTranslation();
 
@@ -26,7 +29,7 @@ const Profile = () => {
 
     try {
       await auth.updateUser({
-        name,
+        name: name, password: newPassword1,
       });
       showToast(t("Profile saved"), {
         type: "success",
@@ -40,6 +43,18 @@ const Profile = () => {
 
   const handleNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setName(ev.target.value);
+  };
+  
+  const handleOldPasswordChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setOldPassword(ev.target.value);
+  };
+  
+  const handleNewPassword1Change = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword1(ev.target.value);
+  };
+  
+  const handleNewPassword2Change = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword2(ev.target.value);
   };
 
   const handleAvatarUpload = async (avatarUrl: string) => {
@@ -80,7 +95,6 @@ const Profile = () => {
           />
         </SettingRow>
         <SettingRow
-          border={false}
           label={t("Name")}
           name="name"
           description={t(
@@ -92,6 +106,45 @@ const Profile = () => {
             autoComplete="name"
             value={name}
             onChange={handleNameChange}
+            required
+          />
+        </SettingRow>
+        <SettingRow
+          border={false}
+          label={t("Old password")}
+          name="password"
+        >
+          <Input
+            id="passwordOld"
+            type="password"
+            value={oldPassword}
+            onChange={handleOldPasswordChange}
+            required
+          />
+        </SettingRow>
+        <SettingRow
+          border={false}
+          label={t("New password")}
+          name="password"
+        >
+          <Input
+            id="passwordNew1"
+            type="password"
+            value={newPassword1}
+            onChange={handleNewPassword1Change}
+            required
+          />
+        </SettingRow>
+        <SettingRow
+          border={false}
+          label={t("Confirm new password")}
+          name="password"
+        >
+          <Input
+            id="passwordNew2"
+            type="password"
+            value={newPassword2}
+            onChange={handleNewPassword2Change}
             required
           />
         </SettingRow>
