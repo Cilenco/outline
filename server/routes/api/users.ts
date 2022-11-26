@@ -186,12 +186,16 @@ router.post(
   transaction(),
   async (ctx: TransactionContext) => {
     const { user, transaction } = ctx.state;
-    const { name, password, avatarUrl, language, preferences } = ctx.request.body;
+    const { name, oldPassword, newPassword, avatarUrl, language, preferences } = ctx.request.body;
     if (name) {
       user.name = name;
     }
-    if (password) {
-      user.passwordHash = bcrypt.hashSync(password);
+    if (oldPassword && newPassword) {
+      if (bcrypt.compareSync(oldPassword, user.passwordHash ?? "")) {
+        user.passwordHash = bcrypt.hashSync(newPassword);
+      } else {
+        throw ValidationError("Old password is not correct");
+      }
     }
     if (avatarUrl) {
       user.avatarUrl = avatarUrl;

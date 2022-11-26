@@ -29,7 +29,9 @@ const Profile = () => {
 
     try {
       await auth.updateUser({
-        name: name, password: newPassword1,
+        name: name,
+        oldPassword: oldPassword,
+        newPassword: newPassword1,
       });
       showToast(t("Profile saved"), {
         type: "success",
