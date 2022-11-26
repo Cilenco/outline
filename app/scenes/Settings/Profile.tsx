@@ -72,6 +72,8 @@ const Profile = () => {
     });
   };
 
+  const requirePassword = oldPassword || newPassword1 || newPassword2;
+
   const isValid = form.current?.checkValidity();
   const { isSaving } = auth;
 
@@ -119,7 +121,7 @@ const Profile = () => {
             type="password"
             value={oldPassword}
             onChange={handleOldPasswordChange}
-            required
+            required={requirePassword}
           />
         </SettingRow>
         <SettingRow
@@ -132,7 +134,7 @@ const Profile = () => {
             type="password"
             value={newPassword1}
             onChange={handleNewPassword1Change}
-            required
+            required={requirePassword}
           />
         </SettingRow>
         <SettingRow
@@ -145,7 +147,8 @@ const Profile = () => {
             type="password"
             value={newPassword2}
             onChange={handleNewPassword2Change}
-            required
+            required={requirePassword}
+            pattern={newPassword1}
           />
         </SettingRow>
 
