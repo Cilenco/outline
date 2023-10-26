@@ -90,6 +90,7 @@ router.post(
 
     const data = AuthenticationHelper.providers
       .filter((p) => p.id !== "email")
+      .filter((p) => p.id !== "password")
       .map((p) => {
         const row = teamAuthenticationProviders.find((t) => t.name === p.id);
 
