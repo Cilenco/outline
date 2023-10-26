@@ -59,6 +59,7 @@ export type PublicEnv = {
   DEFAULT_LANGUAGE: string;
   GOOGLE_ANALYTICS_ID: string | undefined;
   RELEASE: string | undefined;
+  LOCAL_LOGIN_ENABLED: boolean;
   APP_NAME: string;
   analytics: {
     service?: IntegrationService;
