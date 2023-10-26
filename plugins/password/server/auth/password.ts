@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
+import JWT from "jsonwebtoken";
 import Router from "koa-router";
+import randomstring from "randomstring";
 import { Client } from "@shared/types";
 import accountProvisioner from "@server/commands/accountProvisioner";
 import ResetPasswordEmail from "@server/emails/templates/ResetPasswordEmail";
@@ -8,9 +10,12 @@ import { rateLimiter } from "@server/middlewares/rateLimiter";
 import { User } from "@server/models";
 import { RateLimiterStrategy } from "@server/utils/RateLimiter";
 import { signIn } from "@server/utils/authentication";
+import { getUserForPasswordResetToken } from "@server/utils/jwt";
 import { assertEmail, assertPresent } from "@server/validation";
 
 const router = new Router();
+
+const AUTH_PROVIDER_NAME = "password";
 
 if (env.LOCAL_ADMIN_EMAIL && env.LOCAL_ADMIN_PASSWORD) {
   router.post(
@@ -29,7 +34,7 @@ if (env.LOCAL_ADMIN_EMAIL && env.LOCAL_ADMIN_PASSWORD) {
       });
 
       const localUserAuth = user?.authentications.find(
-        (auth) => auth.authenticationProvider.name === "password"
+        (auth) => auth.authenticationProvider.name === AUTH_PROVIDER_NAME
       );
 
       if (user && localUserAuth) {
@@ -73,7 +78,7 @@ if (env.LOCAL_ADMIN_EMAIL && env.LOCAL_ADMIN_PASSWORD) {
           name: email,
         },
         authenticationProvider: {
-          name: "password",
+          name: AUTH_PROVIDER_NAME,
           providerId: env.URL,
         },
         authentication: {
@@ -83,7 +88,7 @@ if (env.LOCAL_ADMIN_EMAIL && env.LOCAL_ADMIN_PASSWORD) {
         },
       });
 
-      await signIn(ctx, "password", {
+      await signIn(ctx, AUTH_PROVIDER_NAME, {
         user: result.user,
         team: result.team,
         isNewTeam: result.isNewTeam,
@@ -105,20 +110,56 @@ if (env.LOCAL_ADMIN_EMAIL && env.LOCAL_ADMIN_PASSWORD) {
       });
 
       if (!user || user.isSuspended) {
-        return ctx.redirect("/?notice=password-request-failed");
+        return ctx.redirect("/?notice=password-reset-failed");
       }
 
-      // Insert password request to database
+      const passwordAuth = user.authentications.find(
+        (it) => it.authenticationProvider.name === AUTH_PROVIDER_NAME
+      );
 
+      if (!passwordAuth) {
+        return ctx.redirect("/?notice=password-reset-failed");
+      }
+
+      passwordAuth.refreshToken = JWT.sign(
+        {
+          id: user.id,
+          createdAt: new Date().toISOString(),
+          type: "password-reset",
+        },
+        randomstring.generate(32)
+      );
+
+      await passwordAuth.save();
       await new ResetPasswordEmail({
         to: user.email,
-        token: user.getEmailSigninToken(),
+        token: passwordAuth.refreshToken,
         userName: user.name,
       }).schedule();
 
-      return ctx.redirect(`/?notice=password-request-success`);
+      return ctx.redirect(`/?notice=password-reset-success`);
     }
   );
+
+  router.get("password.callback", async (ctx) => {
+    const { token } = ctx.request.query;
+    assertPresent(token, "token is required");
+
+    let user!: User;
+
+    try {
+      user = await getUserForPasswordResetToken(token as string);
+    } catch (err) {
+      ctx.redirect(`/?notice=expired-token`);
+      return;
+    }
+
+    if (!user || user.isSuspended) {
+      return ctx.redirect("/?notice=suspended");
+    }
+
+    // return ctx.redirect("/?notice=auth-error");
+  });
 }
 
 export default router;

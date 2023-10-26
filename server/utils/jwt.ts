@@ -1,4 +1,4 @@
-import { subMinutes } from "date-fns";
+import { subDays, subMinutes } from "date-fns";
 import JWT from "jsonwebtoken";
 import { Team, User } from "@server/models";
 import { AuthenticationError } from "../errors";
@@ -95,4 +95,25 @@ export async function getUserForEmailSigninToken(token: string): Promise<User> {
   }
 
   return user;
+}
+
+export async function getUserForPasswordResetToken(
+  token: string
+): Promise<User> {
+  const payload = getJWTPayload(token);
+
+  if (payload.type !== "password-reset") {
+    throw AuthenticationError("Invalid token");
+  }
+
+  // check the token is within it's expiration time
+  if (payload.createdAt) {
+    if (new Date(payload.createdAt) < subDays(new Date(), 1)) {
+      throw AuthenticationError("Expired token");
+    }
+  }
+
+  return await User.scope("withAuthentications").findByPk(payload.id, {
+    rejectOnEmpty: true,
+  });
 }

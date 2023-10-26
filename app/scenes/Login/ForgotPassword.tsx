@@ -20,9 +20,6 @@ import Notices from "./components/Notices";
 
 function ForgotPassword() {
   const { t } = useTranslation();
-  // const { auth } = useStores();
-  // const { config } = auth;
-
   const [email, setEmail] = React.useState("");
 
   const handleEmailChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +44,7 @@ function ForgotPassword() {
         <StyledHeading as="h2" centered>
           {t("Request a new password")}
         </StyledHeading>
-        <Form method="POST" action="/auth/password">
+        <Form method="POST" action="/auth/password.reset">
           <InputLogin
             type="email"
             placeholder="E-Mail"

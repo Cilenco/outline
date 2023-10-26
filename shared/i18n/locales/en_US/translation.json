@@ -686,6 +686,8 @@
   "Authentication failed – this login method was disabled by a team admin.": "Authentication failed – this login method was disabled by a team admin.",
   "The workspace you are trying to join requires an invite before you can create an account.<1></1>Please request an invite from your workspace admin and try again.": "The workspace you are trying to join requires an invite before you can create an account.<1></1>Please request an invite from your workspace admin and try again.",
   "Sorry, your domain is not allowed. Please try again with an allowed workspace domain.": "Sorry, your domain is not allowed. Please try again with an allowed workspace domain.",
+  "An password request email link was recently sent, please check your inbox or try again in a few minutes.": "An password request email link was recently sent, please check your inbox or try again in a few minutes.",
+  "Sorry, no account associated with this email address could be found. Please try another email address.": "Sorry, no account associated with this email address could be found. Please try another email address.",
   "Forgot password?": "Forgot password?",
   "Or": "Or",
   "Reset password": "Reset password",
