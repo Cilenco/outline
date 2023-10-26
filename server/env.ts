@@ -357,6 +357,24 @@ export class Environment {
   public DD_SERVICE = process.env.DD_SERVICE ?? "outline";
 
   /**
+   * Local admin client credentials. To enable password authentication.
+   */
+  @IsOptional()
+  @CannotUseWithout("LOCAL_ADMIN_PASSWORD")
+  public LOCAL_ADMIN_EMAIL = this.toOptionalString(
+    process.env.LOCAL_ADMIN_EMAIL
+  );
+
+  @IsOptional()
+  @CannotUseWithout("LOCAL_ADMIN_EMAIL")
+  public LOCAL_ADMIN_PASSWORD = this.toOptionalString(
+    process.env.LOCAL_ADMIN_PASSWORD
+  );
+
+  public LOCAL_LOGIN_ENABLED =
+    process.env.LOCAL_ADMIN_EMAIL && process.env.LOCAL_ADMIN_PASSWORD;
+
+  /**
    * Google OAuth2 client credentials. To enable authentication with Google.
    */
   @IsOptional()
