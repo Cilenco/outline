@@ -78,6 +78,10 @@ function AuthenticationProvider(props: Props) {
 
   const href = useRedirectHref(authUrl);
 
+  if (id === "password") {
+    return null;
+  }
+
   if (id === "email") {
     if (isCreate) {
       return null;

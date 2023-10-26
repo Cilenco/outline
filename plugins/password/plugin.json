@@ -1,0 +1,5 @@
+{
+  "name": "Password",
+  "description": "Adds an local email/password authentication provider.",
+  "requiredEnvVars": ["LOCAL_ADMIN_EMAIL", "LOCAL_ADMIN_PASSWORD"]
+}
