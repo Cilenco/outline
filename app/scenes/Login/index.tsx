@@ -32,6 +32,7 @@ import { detectLanguage } from "~/utils/language";
 import AuthenticationProvider from "./components/AuthenticationProvider";
 import BackButton from "./components/BackButton";
 import Notices from "./components/Notices";
+import PasswordProvider from "./components/PasswordProvider";
 
 type Props = {
   children?: (config?: Config) => React.ReactNode;
@@ -263,6 +264,7 @@ function Login({ children }: Props) {
           </>
         )}
         <Notices />
+        {env.LOCAL_LOGIN_ENABLED && <PasswordProvider />}
         {defaultProvider && (
           <React.Fragment key={defaultProvider.id}>
             <AuthenticationProvider
