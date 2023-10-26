@@ -39,7 +39,7 @@ describe("password", () => {
     });
     expect(res.status).toEqual(200);
     expect(res.redirected).toEqual(true);
-    expect(res.url).toContain("password-request-success");
+    expect(res.url).toContain("password-reset-success");
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
@@ -54,7 +54,7 @@ describe("password", () => {
     });
     expect(res.status).toEqual(200);
     expect(res.redirected).toEqual(true);
-    expect(res.url).toContain("password-request-failed");
+    expect(res.url).toContain("password-reset-failed");
     expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
   });
