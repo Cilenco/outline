@@ -110,6 +110,18 @@ export default function Notices() {
           workspace domain.
         </Trans>
       )}
+      {notice === "password-reset-success" && (
+        <Trans>
+          An password request email link was recently sent, please check your
+          inbox or try again in a few minutes.
+        </Trans>
+      )}
+      {notice === "password-reset-failed" && (
+        <Trans>
+          Sorry, no account associated with this email address could be found.
+          Please try another email address.
+        </Trans>
+      )}
     </Notice>
   );
 }
