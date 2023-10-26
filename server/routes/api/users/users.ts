@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import Router from "koa-router";
 import { Op, WhereOptions } from "sequelize";
 import { UserPreference } from "@shared/types";
@@ -16,7 +17,7 @@ import auth from "@server/middlewares/authentication";
 import { rateLimiter } from "@server/middlewares/rateLimiter";
 import { transaction } from "@server/middlewares/transaction";
 import validate from "@server/middlewares/validate";
-import { Event, User, Team } from "@server/models";
+import { Event, User, Team, UserAuthentication } from "@server/models";
 import { UserFlag } from "@server/models/User";
 import { can, authorize } from "@server/policies";
 import { presentUser, presentPolicies } from "@server/presenters";
@@ -199,7 +200,15 @@ router.post(
   async (ctx: APIContext<T.UsersUpdateReq>) => {
     const { auth, transaction } = ctx.state;
     const actor = auth.user;
-    const { id, name, avatarUrl, language, preferences } = ctx.input.body;
+    const {
+      id,
+      name,
+      avatarUrl,
+      language,
+      oldPassword,
+      newPassword,
+      preferences,
+    } = ctx.input.body;
 
     let user: User | null = actor;
     if (id) {
@@ -220,6 +229,20 @@ router.post(
     }
     if (language) {
       user.language = language;
+    }
+    if (oldPassword && newPassword) {
+      const userAuth = await UserAuthentication.findOne({
+        where: { userId: user.id },
+      });
+
+      if (userAuth) {
+        if (await bcrypt.compare(oldPassword, userAuth.accessToken)) {
+          const newPasswordHash = bcrypt.hashSync(newPassword, 10);
+
+          userAuth.accessToken = newPasswordHash;
+          await userAuth.save();
+        }
+      }
     }
     if (preferences) {
       for (const key of Object.keys(preferences) as Array<UserPreference>) {

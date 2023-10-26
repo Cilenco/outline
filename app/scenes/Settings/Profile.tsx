@@ -18,23 +18,58 @@ const Profile = () => {
   const user = useCurrentUser();
   const form = React.useRef<HTMLFormElement>(null);
   const [name, setName] = React.useState<string>(user.name || "");
+  const [oldPw, setOldPw] = React.useState<string>("");
+  const [newPw1, setNewPw1] = React.useState<string>("");
+  const [newPw2, setNewPw2] = React.useState<string>("");
   const { t } = useTranslation();
 
   const handleSubmit = async (ev: React.SyntheticEvent) => {
     ev.preventDefault();
 
     try {
+      if (oldPw || newPw1 || newPw2) {
+        if (!oldPw || !newPw1 || !newPw2) {
+          throw new Error(t("All passwords must be filled"));
+        }
+
+        if (newPw1 !== newPw2) {
+          throw new Error(t("New passwords do not match."));
+        }
+      }
+
       await auth.updateUser({
         name,
+        oldPassword: oldPw,
+        newPassword: newPw1,
       });
       toast.success(t("Profile saved"));
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setOldPw("");
+      setNewPw1("");
+      setNewPw2("");
     }
   };
 
   const handleNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setName(ev.target.value);
+  };
+
+  const handleOldPasswordChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setOldPw(ev.target.value);
+  };
+
+  const handleNewPasswordChange1 = (
+    ev: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNewPw1(ev.target.value);
+  };
+
+  const handleNewPasswordChange2 = (
+    ev: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNewPw2(ev.target.value);
   };
 
   const handleAvatarUpload = async (avatarUrl: string) => {
@@ -71,7 +106,6 @@ const Profile = () => {
           />
         </SettingRow>
         <SettingRow
-          border={false}
           label={t("Name")}
           name="name"
           description={t(
@@ -86,7 +120,39 @@ const Profile = () => {
             required
           />
         </SettingRow>
-
+        <SettingRow
+          border={false}
+          label={t("Password")}
+          name="password"
+          description={t(
+            `Set a new password for your account. It must be at least 8 caracters long and 
+            contain a small and capital letter, a number and a special symbol.`
+          )}
+        >
+          <div>
+            <Input
+              id="old-password"
+              type="password"
+              placeholder={t("Current password")}
+              value={oldPw}
+              onChange={handleOldPasswordChange}
+            />
+            <Input
+              id="new-password-1"
+              type="password"
+              placeholder={t("New password")}
+              value={newPw1}
+              onChange={handleNewPasswordChange1}
+            />
+            <Input
+              id="new-password-2"
+              type="password"
+              placeholder={t("Confirm new password")}
+              value={newPw2}
+              onChange={handleNewPasswordChange2}
+            />
+          </div>
+        </SettingRow>
         <Button type="submit" disabled={isSaving || !isValid}>
           {isSaving ? `${t("Saving")}…` : t("Save")}
         </Button>

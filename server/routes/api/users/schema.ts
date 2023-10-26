@@ -71,6 +71,8 @@ export const UsersUpdateSchema = BaseSchema.extend({
     name: z.string().optional(),
     avatarUrl: z.string().optional(),
     language: z.string().optional(),
+    oldPassword: z.string().optional(),
+    newPassword: z.string().optional(),
     preferences: z.record(z.nativeEnum(UserPreference), z.boolean()).optional(),
   }),
 });

@@ -277,6 +277,8 @@ export default class AuthStore {
     name?: string;
     avatarUrl?: string | null;
     language?: string;
+    oldPassword?: string;
+    newPassword?: string;
     preferences?: UserPreferences;
   }) => {
     this.isSaving = true;
